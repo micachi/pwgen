@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>パスワード一括生成｜すべてブラウザ内で完結（送信なし）</title>
+<meta name="description" content="生成個数・文字数・文字種を指定して複数パスワードをまとめて生成。暗号学的乱数(crypto.getRandomValues)使用。入力も生成結果もサーバーには送信されません。">
+<style>
+/*@STYLE*/
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>パスワード一括生成</h1>
+    <p class="tag">
+      <span class="badge ok">🔒 ブラウザ内で完結</span>
+      <span class="badge">サーバー送信なし</span>
+      <span class="badge">ログなし</span>
+    </p>
+  </header>
+
+  <section class="panel">
+    <div class="grid">
+      <label class="field">
+        <span>生成個数 <b id="countVal">10</b></span>
+        <input type="range" id="count" min="1" max="100" value="10">
+      </label>
+      <label class="field">
+        <span>文字数 <b id="lenVal">16</b></span>
+        <input type="range" id="length" min="4" max="64" value="16">
+      </label>
+    </div>
+
+    <div class="field">
+      <span>文字種</span>
+      <div class="checks">
+        <label><input type="checkbox" id="upper" checked> 大文字 <em>A-Z</em></label>
+        <label><input type="checkbox" id="lower" checked> 小文字 <em>a-z</em></label>
+        <label><input type="checkbox" id="digits" checked> 数字 <em>0-9</em></label>
+        <label><input type="checkbox" id="symbols" checked> 記号 <em>!@#$%…</em></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <span>条件</span>
+      <div class="checks">
+        <label><input type="checkbox" id="excludeAmbiguous" checked> 紛らわしい文字を除く <em>il1Lo0O</em></label>
+        <label><input type="checkbox" id="letterFirst"> 先頭を英字にする</label>
+        <label><input type="checkbox" id="noRepeat"> 同じ文字の連続を避ける</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <span>除外する文字（任意）</span>
+      <input type="text" id="excludeChars" placeholder="例: & < > ' &quot;" class="mono">
+    </div>
+
+    <div class="actions">
+      <button id="gen" class="primary">生成する</button>
+      <button id="copyAll">まとめてコピー</button>
+      <button id="save">テキスト保存</button>
+    </div>
+
+    <div id="status" class="status"></div>
+  </section>
+
+  <section class="panel" id="resultPanel" hidden>
+    <div class="meter">
+      <div class="meter-head">
+        <span>推定エントロピー <b id="bits">—</b></span>
+        <span class="sub">総当たり時間の目安: <b id="crack">—</b></span>
+      </div>
+      <div class="bar"><i id="bar"></i></div>
+      <p class="sub" id="poolInfo"></p>
+    </div>
+    <ol id="list" class="list"></ol>
+  </section>
+
+  <footer>
+    <p><b>仕組み：</b>乱数は <code>crypto.getRandomValues</code>（OSの暗号学的CSPRNG）。
+    均等性をカイ二乗検定で検証済み。モジュロバイアスを除去するため拒否サンプリングを採用しています。</p>
+    <p class="sub">生成されたパスワードはメモリ上にのみ存在し、ネットワーク送信・保存・ログ出力は一切行いません。
+    ページを閉じれば消えます。このHTMLファイルをダウンロードすれば<b>オフラインでも動作</b>します。</p>
+  </footer>
+</div>
+
+<script>/*@CORE*/</script>
+<script>/*@APP*/</script>
+</body>
+</html>
