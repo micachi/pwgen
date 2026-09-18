@@ -79,6 +79,12 @@
   </section>
 
   <footer>
+    <p class="foot-links">
+      <a href="https://micachi.github.io/tools/">🧰 便利ツール一覧</a>
+      <a href="https://micachi.github.io/tools/qr/">QRコード生成</a>
+      <a href="https://micachi.github.io/tools/mojicount/">文字数カウンター</a>
+      <a href="https://micachi.github.io/tools/color/">色・コントラスト検査</a>
+    </p>
     <p><b>仕組み：</b>乱数は <code>crypto.getRandomValues</code>（OSの暗号学的CSPRNG）。
     均等性をカイ二乗検定で検証済み。モジュロバイアスを除去するため拒否サンプリングを採用しています。</p>
     <p class="sub">生成されたパスワードはメモリ上にのみ存在し、ネットワーク送信・保存・ログ出力は一切行いません。
