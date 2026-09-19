@@ -6,14 +6,30 @@
 <title>パスワード一括生成｜すべてブラウザ内で完結（送信なし）</title>
 <meta name="description" content="生成個数・文字数・文字種を指定して複数パスワードをまとめて生成。暗号学的乱数(crypto.getRandomValues)使用。入力も生成結果もサーバーには送信されません。">
 <style>
-/* 共通ナビ（tools.wicachi.com と同一デザイン） */
-.nav{position:sticky;top:0;z-index:10;background:rgba(13,16,23,.94);backdrop-filter:blur(8px);
+/* 共通ナビ（ドロップダウン＋カテゴリ分组） */
+.nav{position:sticky;top:0;z-index:50;background:rgba(13,16,23,.95);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);margin:0 0 28px}
-.nav-in{max-width:820px;margin:0 auto;padding:11px 16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.nav-brand{font-weight:700;font-size:.92rem;letter-spacing:.04em;margin-right:8px;color:var(--fg)}
-.nav a{padding:5px 11px;border-radius:8px;font-size:.85rem;color:var(--mut);transition:.15s}
-.nav a:hover{background:#1c2330;color:var(--fg);text-decoration:none}
-.nav a.on{background:var(--acc);color:#08101e;font-weight:600}
+.nav-in{max-width:820px;margin:0 auto;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.nav-brand{font-weight:700;font-size:.92rem;letter-spacing:.04em;color:var(--fg);text-decoration:none;white-space:nowrap}
+.nav-brand:hover{color:var(--acc);text-decoration:none}
+.nav-cur{margin-left:auto;font-size:.85rem;color:var(--acc);font-weight:600;white-space:nowrap}
+@media(max-width:560px){.nav-cur{display:none}}
+.dd{position:relative}
+.dd-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:9px;
+  border:1px solid var(--line);background:#1c2330;color:var(--fg);font-size:.86rem;cursor:pointer;font-family:inherit}
+.dd-btn:hover{background:#242c3a;border-color:#33405a}
+.dd-btn .caret{font-size:.7rem;opacity:.8;transition:transform .18s}
+.dd-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
+.dd-menu{position:absolute;top:calc(100% + 8px);left:0;z-index:60;min-width:260px;
+  background:#161b24;border:1px solid #2b333f;border-radius:12px;padding:10px;
+  box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.dd-group{padding:6px 0}
+.dd-group + .dd-group{border-top:1px solid #232a36}
+.dd-cat{display:block;font-size:.7rem;color:var(--mut);letter-spacing:.08em;margin:0 0 4px 8px}
+.dd-menu a{display:block;padding:7px 10px;border-radius:8px;font-size:.87rem;color:var(--fg);text-decoration:none}
+.dd-menu a:hover{background:#212a37;color:var(--acc);text-decoration:none}
+.dd-menu a.on{background:var(--acc);color:#08101e;font-weight:600}
+.dd-menu a.on:hover{background:#6cabff;color:#08101e}
 
 :root{
   --bg:#0d1017; --panel:#151a23; --line:#232a36; --fg:#e6e9ee; --mut:#8b95a5;
@@ -69,18 +85,40 @@ footer code{background:#1c2330;padding:1px 5px;border-radius:4px}
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
-  <span class="nav-brand">🧰 便利ツール</span>
-  <a href="https://tools.wicachi.com/">一覧</a>
-  <a href="https://tools.wicachi.com/qr/">QRコード生成</a>
-  <a href="https://tools.wicachi.com/mojicount/">文字数カウンター</a>
-  <a href="https://tools.wicachi.com/color/">色・コントラスト検査</a>
-  <a href="https://tools.wicachi.com/json/">JSON 整形・検証</a>
-  <a href="https://tools.wicachi.com/unit/">単位変換</a>
-  <a href="https://tools.wicachi.com/datecalc/">日付計算</a>
-  <a href="https://tools.wicachi.com/intunestart/">Intune スタートレイアウト</a>
-  <a href="https://micachi.github.io/pwgen/" class="on" aria-current="page">パスワード一括生成</a>
-  <a href="https://micachi.github.io/travel-budget/">旅行予算シミュレーター</a>
+  <a class="nav-brand" href="https://tools.wicachi.com/">🧰 便利ツール</a>
+  <div class="dd">
+    <button type="button" class="dd-btn" id="ddBtn" aria-expanded="false" aria-controls="ddMenu">ツールメニュー <span class="caret">▾</span></button>
+    <div class="dd-menu" id="ddMenu" role="menu" hidden>
+      <div class="dd-group"><span class="dd-cat">作成・生成</span>
+        <a href="https://tools.wicachi.com/qr/">QRコード生成</a>
+        <a href="https://tools.wicachi.com/intunestart/">Intune スタートレイアウト</a>
+        <a href="https://micachi.github.io/pwgen/" class="on" aria-current="page">パスワード一括生成</a>
+      </div>
+      <div class="dd-group"><span class="dd-cat">検査・整形</span>
+        <a href="https://tools.wicachi.com/mojicount/">文字数カウンター</a>
+        <a href="https://tools.wicachi.com/color/">色・コントラスト検査</a>
+        <a href="https://tools.wicachi.com/json/">JSON 整形・検証</a>
+      </div>
+      <div class="dd-group"><span class="dd-cat">計算</span>
+        <a href="https://tools.wicachi.com/unit/">単位変換</a>
+        <a href="https://tools.wicachi.com/datecalc/">日付計算</a>
+        <a href="https://micachi.github.io/travel-budget/">旅行予算シミュレーター</a>
+      </div>
+    </div>
+  </div>
+  <span class="nav-cur">パスワード一括生成</span>
 </div></nav>
+<script>
+(function(){
+  var btn=document.getElementById("ddBtn"), menu=document.getElementById("ddMenu");
+  if(!btn||!menu)return;
+  var open=function(){menu.hidden=false;btn.setAttribute("aria-expanded","true");};
+  var close=function(){menu.hidden=true;btn.setAttribute("aria-expanded","false");};
+  btn.addEventListener("click",function(e){e.stopPropagation();menu.hidden?open():close();});
+  document.addEventListener("click",function(e){if(!menu.contains(e.target)&&e.target!==btn)close();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){close();btn.focus();}});
+})();
+</script>
 <div class="wrap">
 
   <header>
