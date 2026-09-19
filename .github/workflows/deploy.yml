@@ -18,9 +18,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: 単体テスト（乱数の均等性・生成ロジック）
-        run: node test.js
-      - name: 単一HTMLビルド
+      # 統合済み。このリポジトリは tools.wicachi.com/password/ への
+      # リダイレクト専用なのでテスト対象なし。
+      - name: リダイレクトページ生成
         run: node build.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
